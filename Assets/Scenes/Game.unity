@@ -1099,6 +1099,7 @@ MonoBehaviour:
   - {fileID: 4790404783644027490, guid: 39eb3512b519659428c1ee3d0a9b85ed, type: 3}
   - {fileID: 4098008219954154961, guid: 5496961158f3e2847ac1e320518579fe, type: 3}
   - {fileID: 6708409786070432413, guid: b77a0d2fc50f2e4419d869fb2a58d886, type: 3}
+  - {fileID: 8316656727057500159, guid: 87c34fbf102cdbb419e6df9ea0c0587c, type: 3}
   gameOverSet: {fileID: 1351137381}
 --- !u!4 &1689831064
 Transform:

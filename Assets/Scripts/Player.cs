@@ -17,6 +17,9 @@ public class Player : MonoBehaviour
     public AudioClip powerdownSound;
     private bool betterWeapon;
     public GameObject thruster;
+    public GameObject shield;
+    private bool isShieldActive = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -63,11 +66,23 @@ public class Player : MonoBehaviour
         }
     }
 
+    void DeactivateShield()
+{
+    isShieldActive = false;
+    shield.SetActive(false);
+    AudioSource.PlayClipAtPoint(powerdownSound, transform.position);
+    gM.GetComponent<GameManager>().PowerupChange("No Powerup");
+}
+
     public void LoseLife()
     {
+        if (isShieldActive)
+    {
+        DeactivateShield();
+        return;
+    }
+
         lives--;
-        //lives -= 1;
-        //lives = lives - 1;
         gM.GetComponent<GameManager>().LivesChange(lives);
         if (lives <= 0) 
         {
@@ -79,53 +94,63 @@ public class Player : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
+{
+    switch(collision.name)
     {
-        switch(collision.name)
-        {
-            case "Coin(Clone)":
-                //I picked a coin!
-                AudioSource.PlayClipAtPoint(coinSound, transform.position);
+        case "Coin(Clone)":
+            //I picked a coin!
+            AudioSource.PlayClipAtPoint(coinSound, transform.position);
+            gM.GetComponent<GameManager>().EarnScore(1);
+            Destroy(collision.gameObject);
+            break;
+
+        case "Health(Clone)":
+            //I picked a health!
+            AudioSource.PlayClipAtPoint(healthSound, transform.position);
+            if (lives >= 3)
+            {
                 gM.GetComponent<GameManager>().EarnScore(1);
-                Destroy(collision.gameObject);
-                break;
-            case "Health(Clone)":
-                //I picked a health!
-                AudioSource.PlayClipAtPoint(healthSound, transform.position);
-                if (lives >= 3)
-                {
-                    gM.GetComponent<GameManager>().EarnScore(1);
-                } else if (lives < 3)
-                {
-                    lives++;
-                    gM.GetComponent<GameManager>().LivesChange(lives);
-                }
-                Destroy(collision.gameObject);
-                break;
-            case "Powerup(Clone)":
-                //I picked a powerup!
-                AudioSource.PlayClipAtPoint(powerupSound, transform.position);
-                Destroy(collision.gameObject);
-                int tempInt;
-                tempInt = Random.Range(1, 4);
-                if (tempInt == 1)
-                {
-                    playerSpeed = 10f;
-                    StartCoroutine("SpeedPowerDown");
-                    gM.GetComponent<GameManager>().PowerupChange("Speed");
-                    thruster.SetActive(true);
-                } else if (tempInt == 2)
-                {
-                    betterWeapon = true;
-                    StartCoroutine("WeaponPowerDown");
-                    gM.GetComponent<GameManager>().PowerupChange("Weapon");
-                } else if (tempInt == 3)
-                {
-                    //Shield Powerup
-                    gM.GetComponent<GameManager>().PowerupChange("Shield");
-                }
-                break;
-        }
+            } 
+            else if (lives < 3)
+            {
+                lives++;
+                gM.GetComponent<GameManager>().LivesChange(lives);
+            }
+            Destroy(collision.gameObject);
+            break;
+
+        case "Powerup(Clone)":
+            //I picked a powerup!
+            AudioSource.PlayClipAtPoint(powerupSound, transform.position);
+            Destroy(collision.gameObject);
+            int tempInt = Random.Range(1, 4);
+
+            if (tempInt == 1)
+            {
+                //Speed Powerup
+                playerSpeed = 10f;
+                StartCoroutine("SpeedPowerDown");
+                gM.GetComponent<GameManager>().PowerupChange("Speed");
+                thruster.SetActive(true);
+            } 
+            else if (tempInt == 2)
+            {
+                //Weapon Powerup
+                betterWeapon = true;
+                StartCoroutine("WeaponPowerDown");
+                gM.GetComponent<GameManager>().PowerupChange("Weapon");
+            } 
+            else if (tempInt == 3)
+            {
+                // Shield Powerup
+                isShieldActive = true;
+                shield.SetActive(true);
+                gM.GetComponent<GameManager>().PowerupChange("Shield");
+            }
+            break;
     }
+}
+
 
     IEnumerator SpeedPowerDown ()
     {
@@ -143,5 +168,4 @@ public class Player : MonoBehaviour
         betterWeapon = false;
         gM.GetComponent<GameManager>().PowerupChange("No Powerup");
     }
-
 }
