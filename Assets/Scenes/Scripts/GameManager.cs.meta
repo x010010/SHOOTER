@@ -3,8 +3,12 @@ guid: 1efc7fd770c832a419110012d994a6b2
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
+<<<<<<< Updated upstream:Assets/Scenes/Scripts/GameManager.cs.meta
   defaultReferences:
   - enemyOnePrefab: {fileID: 974651681503015039, guid: e19e25dda6a503441aa8db5242ba999b, type: 3}
+=======
+  defaultReferences: []
+>>>>>>> Stashed changes:Assets/Scripts/Enemy.cs.meta
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

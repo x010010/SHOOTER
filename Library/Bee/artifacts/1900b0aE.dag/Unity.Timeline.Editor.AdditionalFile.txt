@@ -1,1 +1,5 @@
+<<<<<<< Updated upstream
 E:\Game Files\Unity\Projects\shooter
+=======
+E:\Game Files\Unity\Projects\Fighter Planes 2
+>>>>>>> Stashed changes
